@@ -1,8 +1,5 @@
 package com.example.poolitnow;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -14,15 +11,14 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 public class CreateCabpool extends AppCompatActivity {
 
@@ -35,7 +31,7 @@ public class CreateCabpool extends AppCompatActivity {
     int day, month, year, hour, minute;
     String date,time,from, to;
 
-    ArrayList<com.example.poolitnow.Cabpools> cabpools;
+    ArrayList<Cabpools> cabpools;
     DatabaseReference databaseReference;
 
     @Override
@@ -51,7 +47,6 @@ public class CreateCabpool extends AppCompatActivity {
         add_Button = findViewById(R.id.AddButton_Create);
 
         cabpools = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cabpools");
 
         //code to input date
         date_Button.setOnClickListener(new View.OnClickListener() {
@@ -118,16 +113,19 @@ public class CreateCabpool extends AppCompatActivity {
                         from = from_EditText.getText().toString();
                         to = to_EditText.getText().toString();
                                                                     //for uploading data to firebase
-                        cabpools.add(new Cabpools(from,to,date,time));
-                        databaseReference.push().setValue(cabpools).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful())
-                                            Toast.makeText(getApplicationContext(),"successful",Toast.LENGTH_SHORT).show();
-                                    }
-                        });
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cabpools");
+                        HashMap<String,String> hashMap = new HashMap<>();
 
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        hashMap.put("from",from);
+                        hashMap.put("to",to);
+                        hashMap.put("date",date);
+                        hashMap.put("time",time);
+
+                        databaseReference.push().setValue(hashMap);
+                        String key = databaseReference.getKey();
+
+                        Intent toMainActivity = new Intent(getApplicationContext(), mainApp_activity.class);
+                        startActivity(toMainActivity);
                 }
             }
         });

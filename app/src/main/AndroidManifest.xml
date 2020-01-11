@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".mainApp_activity"></activity>
         <activity android:name=".register_activity" />
+        <activity android:name=".CreateCabpool" />
         <activity android:name=".forgotPassword_activity" />
         <activity android:name=".MainActivity">
             <intent-filter>

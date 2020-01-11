@@ -153,23 +153,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
-        if(user != null){
+        Intent i = new Intent(MainActivity.this, mainApp_activity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(user != null) {
             mProgress.setMessage("Signing In, please Wait");
             mProgress.show();
-            name=user.getDisplayName();
-            GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-            Intent i= new Intent(MainActivity.this, mainApp_activity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            if (account != null)
-               startActivity(i);
-            else {
-                GoogleSignInAccount gaccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                if(gaccount!= null) startActivity(i);
-            }
-
+            startActivity(i);
 
         }
+
     }
     @Override
     public void onStart() {

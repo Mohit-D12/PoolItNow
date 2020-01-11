@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewTestApp</string>
+    <string name="app_name">PoolItNow</string>
     <string name="string_open">Open</string>
     <string name="string_close">Close</string>
     <string name="string_profile">Profile</string>

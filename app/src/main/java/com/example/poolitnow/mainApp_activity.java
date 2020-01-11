@@ -7,6 +7,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,10 +112,10 @@ public class mainApp_activity extends AppCompatActivity implements NavigationVie
         }
         else if (id == R.id.logOut_navigationBar)
         {
-            //code for logout goes here
-            //to login page
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
+o

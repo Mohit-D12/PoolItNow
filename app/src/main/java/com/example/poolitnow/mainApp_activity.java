@@ -11,9 +11,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class mainApp_activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,12 +31,23 @@ public class mainApp_activity extends AppCompatActivity implements NavigationVie
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
 
+    GoogleSignInClient mGoogleSignInClient;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_app_activity);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient= GoogleSignIn.getClient(getApplicationContext(), gso);
+
+
+
         defaultFragment = new CabpoolFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 defaultFragment).commit();
@@ -112,9 +131,22 @@ public class mainApp_activity extends AppCompatActivity implements NavigationVie
         }
         else if (id == R.id.logOut_navigationBar)
         {
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            FirebaseAuth mAuth= FirebaseAuth.getInstance();
+            mAuth.signOut();
+            revokeAccess();
+            startActivity(new Intent(mainApp_activity.this,MainActivity.class));
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                        Toast.makeText(getApplicationContext(), "Logged out of Google successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -1,4 +1,4 @@
-package com.example.newtestapp;
+package com.example.poolitnow;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +35,7 @@ public class CreateCabpool extends AppCompatActivity {
     int day, month, year, hour, minute;
     String date,time,from, to;
 
-    ArrayList<Cabpools> cabpools;
+    ArrayList<com.example.poolitnow.Cabpools> cabpools;
     DatabaseReference databaseReference;
 
     @Override

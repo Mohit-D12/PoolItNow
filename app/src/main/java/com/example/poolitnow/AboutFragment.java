@@ -1,4 +1,4 @@
-package com.example.newtestapp;
+package com.example.poolitnow;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

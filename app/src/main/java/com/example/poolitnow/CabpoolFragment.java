@@ -1,4 +1,4 @@
-package com.example.newtestapp;
+package com.example.poolitnow;
 
 import android.content.Intent;
 import android.os.Bundle;

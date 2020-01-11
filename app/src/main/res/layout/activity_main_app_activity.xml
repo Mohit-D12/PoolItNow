@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".mainApp_activity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Changed"
+        android:textSize="45sp"
+        android:gravity="center"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

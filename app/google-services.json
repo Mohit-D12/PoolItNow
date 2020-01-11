@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "101427725007-14ld2ahqdi6q6d5tguc0v1fuurej9uvl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.poolitnow",
+            "certificate_hash": "f12a5e9d02073c5dbfffbd97690f2a3e891b2d67"
+          }
+        },
+        {
           "client_id": "101427725007-0281eradqleen9ufjcub8dq86iobuu1h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

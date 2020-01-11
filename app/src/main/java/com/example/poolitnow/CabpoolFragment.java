@@ -1,5 +1,6 @@
 package com.example.poolitnow;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CabpoolFragment extends Fragment {
 
@@ -33,8 +35,11 @@ public class CabpoolFragment extends Fragment {
     private RecyclerView recyclerView;
     DatabaseReference databaseReference;
 
-    ArrayList<Cabpools> cabpools;
-    FirebaseRecyclerOptions<Cabpools> firebaseRecyclerOptions;
+    List<Cabpools> cabpools = new ArrayList<>();
+    List<String> mDataKey = new ArrayList<>();
+
+    ProgressDialog progress;
+
     CabpoolAdapter adapter;
 
 
@@ -57,29 +62,44 @@ public class CabpoolFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        cabpools = new ArrayList<>();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cabpools");
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.cabpoolView = view;
+        init();
+        progress = new ProgressDialog(getActivity());
+        progress.setTitle("Loading");
+        progress.setMessage("Syncing");
+        progress.setCancelable(false);
+        loadData();
+    }
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+    private void loadData() {
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cabpools");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Cabpools cabpool = dataSnapshot.getValue(Cabpools.class);
-                    cabpools.add(cabpool);
+                cabpools.clear();;
+                mDataKey.clear();
+                for(DataSnapshot single:dataSnapshot.getChildren()){
+                    cabpools.add(single.getValue(Cabpools.class));
+                    mDataKey.add(single.getKey().toString());
                 }
-                adapter = new CabpoolAdapter(getContext(),cabpools);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-
-
-
     }
+
+    private void init() {
+        recyclerView = cabpoolView.findViewById(R.id.recyclerView_cabpool);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new CabpoolAdapter(cabpools,mDataKey,getActivity(),"e1Form");
+        recyclerView.setAdapter(adapter);
+    }
+
+
 }

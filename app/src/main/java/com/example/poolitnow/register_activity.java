@@ -25,20 +25,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-public class register_activity extends AppCompatActivity implements  View.OnClickListener{
+public class register_activity extends AppCompatActivity {
 
     EditText name_registerScreen_java, password_registerScreen_java, confirmPassword_registerScreen_java, email_registerScreen_java;
-    TextView dob_registerScreen_java;
     int mYear, mMonth, mDay;
     String date;
     String name;
     String password;
     String confirmPassword, email;
-    Button registerButton_registerScreen_java, datePicker_registerScreen_java;
+    Button registerButton_registerScreen_java;
     // Creating Firebase authentication object
     ProgressDialog mProgress;
     FirebaseAuth mAuth;
-    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +44,14 @@ public class register_activity extends AppCompatActivity implements  View.OnClic
         setContentView(R.layout.activity_register_activity);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mProgress = new ProgressDialog(this);
         name_registerScreen_java = findViewById(R.id.name_registerActivity_xml);
         password_registerScreen_java = findViewById(R.id.password_registerActivity_xml);
         confirmPassword_registerScreen_java = findViewById(R.id.reenterPassword_registerActivity_xml);
         password_registerScreen_java.getTransformationMethod();
         confirmPassword_registerScreen_java.getTransformationMethod();
-        dob_registerScreen_java = findViewById(R.id.DOB_registerActivity_xml);
         email_registerScreen_java = findViewById(R.id.email_registerActivity_xml);
         registerButton_registerScreen_java = findViewById(R.id.registerButton_registerActivity_xml);
-        datePicker_registerScreen_java = findViewById(R.id.datePickerbutton_registerActivity_xml);
-
-        datePicker_registerScreen_java.setOnClickListener(this);
 
         registerButton_registerScreen_java.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,12 +72,8 @@ public class register_activity extends AppCompatActivity implements  View.OnClic
                                 if (task.isSuccessful()) {
 
                                     String uid= mAuth.getCurrentUser().getUid();
-                                    DatabaseReference currentUser_db = mDatabase.child(uid);
                                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                                     mAuth.getCurrentUser().updateProfile(profileChangeRequest);
-
-                                    currentUser_db.child("name").setValue(name);
-                                    currentUser_db.child("date of birth").setValue(date);
 
                                     mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -114,29 +103,4 @@ public class register_activity extends AppCompatActivity implements  View.OnClic
             }});
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view==datePicker_registerScreen_java){
-            final Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                    new DatePickerDialog.OnDateSetListener() {
-
-                        @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-
-                            date = String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear + 1) + "/" + String.valueOf(year);
-                            dob_registerScreen_java.setText(date);
-
-                        }
-                    }, mYear, mMonth, mDay);
-            datePickerDialog.show();
-
-        }
-    }
 }

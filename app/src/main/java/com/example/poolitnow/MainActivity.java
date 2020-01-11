@@ -160,13 +160,13 @@ public class MainActivity extends AppCompatActivity {
             name=user.getDisplayName();
             GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(getApplicationContext());
             Intent i= new Intent(MainActivity.this, mainApp_activity.class);
-            if (account != null) {
-                i.putExtra("Name",account.getDisplayName());
-            }
-
-            else i.putExtra("Name", name);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
+            if (account != null)
+               startActivity(i);
+            else {
+                GoogleSignInAccount gaccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                if(gaccount!= null) startActivity(i);
+            }
 
 
         }
@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
                     } else
                         Toast.makeText(getApplicationContext(), "Sign-in Error, please try again", Toast.LENGTH_SHORT).show();
-                    mAuth.signOut();
                 }
             });
         }

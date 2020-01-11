@@ -118,4 +118,3 @@ public class mainApp_activity extends AppCompatActivity implements NavigationVie
         return true;
     }
 }
-o
